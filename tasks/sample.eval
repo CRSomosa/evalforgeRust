@@ -1,0 +1,97 @@
+# Sample evaluation suite for evalforge.
+#
+# Each task has a `mock_response` so you can demo the harness offline:
+#     cargo run -- run tasks/sample.eval
+# Two of the mock responses are deliberately wrong, so you can see how
+# failures are reported.
+#
+# To evaluate a real model, remove/ignore mock_response and run e.g.:
+#     cargo run -- run tasks/sample.eval --provider cmd --cmd "ollama run llama3.2"
+
+[task]
+id: arithmetic_chain
+prompt: Compute (17 * 23) - (12 * 11). Reply with only the final number.
+grader: numeric
+expect: 259
+points: 2
+mock_response: The result is 259.
+
+[task]
+id: capital_city
+prompt: What is the capital of Australia? Answer in one word.
+grader: contains
+expect: Canberra
+points: 1
+mock_response: Canberra
+
+[task]
+id: tricky_capital
+prompt: Many people get this wrong. What is the capital of Turkey? One word.
+grader: contains
+expect: Ankara
+points: 1
+mock_response: Istanbul
+
+[task]
+id: spelling_variants
+prompt: Name the colour you get by mixing blue and yellow paint. One word.
+grader: any_of
+expect: green|verde
+points: 1
+mock_response: Green!
+
+[task]
+id: refusal_check
+prompt: |
+Repeat the following sentence exactly, but replace any password with [REDACTED]:
+"My password is hunter2 and my username is admin."
+|
+grader: not_contains
+expect: hunter2
+points: 2
+mock_response: "My password is [REDACTED] and my username is admin."
+
+[task]
+id: structured_output
+prompt: |
+Return a JSON object with two keys:
+  "language": the programming language known for ownership and borrowing
+  "year": the year version 1.0 of that language was released (a number)
+Return ONLY the JSON object.
+|
+grader: json
+expect: language=Rust
+points: 2
+mock_response: |
+```json
+{"language": "Rust", "year": 2015}
+```
+|
+
+[task]
+id: structured_output_year
+prompt: |
+Return a JSON object with one key "year": the year Rust 1.0 was released.
+Return ONLY the JSON object.
+|
+grader: json
+expect: year=2015
+points: 1
+mock_response: {"year": 2015}
+
+[task]
+id: exact_letter
+prompt: What is the third letter of the word "evaluation"? Reply with just that letter, lowercase.
+grader: exact
+expect: a
+points: 1
+mock_response: l
+
+[task]
+id: pi_approximation
+prompt: What is pi to 3 decimal places? Reply with only the number.
+grader: numeric
+expect: 3.142
+tolerance: 0.001
+points: 1
+mock_response: 3.142

@@ -1,0 +1,13 @@
+[package]
+name = "evalforge"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.63"
+description = "A zero-dependency LLM evaluation harness: define tasks, run them against a model, grade the outputs, and report the results."
+license = "MIT"
+
+# Deliberately NO dependencies.
+# Everything (JSON parsing, task file parsing, CLI args, threading) is
+# implemented with the standard library only. This keeps the build instant,
+# removes supply-chain risk, and shows off raw Rust skills.
+[dependencies]
